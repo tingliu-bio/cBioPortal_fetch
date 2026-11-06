@@ -7,16 +7,17 @@ A Python script to query the cBioPortal REST API and retrieve all samples for a 
 The script follows four steps:
 1. **Validate input** — verify the cancer type ID exists and retrieve its full name
 2. **Retrieve studies** — find all studies associated with the cancer type
-3. **Retrieve samples** — for each study, fetch all samples and their associated patient IDs
+3. **Retrieve samples** — fetch all samples and their associated patient information
 4. **Write output** — save results to a tab-separated file
 
 Note: a single cancer type may have multiple studies, and each study may have thousands of samples. The `/studies/{studyId}/samples` endpoint supports pagination (`pageNumber` + `pageSize`); the script handles this automatically to ensure no samples are missed.
 
-## Usage
+## How to Use
 
 ```bash
 python3 cBioPortal_fetch.py <cancer_type_id> [output_file]
 ```
+
 The input must be a valid cBioPortal cancer type ID, not a free-text cancer type name (e.g., nhl or brca).
 
 Arguments:
@@ -29,19 +30,19 @@ If no output filename is provided, the script automatically generates:
 <cancer_type_id>_cBioPortal_samples.tsv
 ```
 
-## Examples
+## Example Usage
 
 Specify an output filename:
 ```bash
 python3 cBioPortal_fetch.py nhl nhl_samples.tsv
 ```
-Use the default output filename:
+Or use the default output filename:
 
 ```bash
 python3 cBioPortal_fetch.py brca   # output defaults to brca_cBioPortal_samples.tsv
 ```
 
-## Output
+## Output Format
 
 The script generates a TSV file with the following columns:
 
@@ -68,11 +69,10 @@ nhl             Non-Hodgkin Lymphoma  CTCL_NU13   CTCL_NU13   ctcl_columbia_2015
 nhl             Non-Hodgkin Lymphoma  CTCL_NU14   CTCL_NU14   ctcl_columbia_2015
 ```
 
-## Output Validation and Error Handling
+## Validation and Error Handling
 
 - **Invalid cancer type ID**: exits with a descriptive message and a link to valid IDs
-- **No studies found**: reports that the cancer type exists but has no associated studies in cBioPortal
-- **Empty study**: skips studies with no samples and logs a warning
+- **Missing data**: reports if a cancer type has no associated studies, or skips studies with no samples
 - **Output integrity**: validates row count, column count (5 per row), and flags any rows with missing values with line numbers
 
 ## Dependencies
